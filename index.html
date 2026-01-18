@@ -81,6 +81,7 @@
             font-weight: 600;
             transition: all 0.3s;
             position: relative;
+            cursor: pointer;
         }
 
         .nav-links a::after {
@@ -95,6 +96,10 @@
         }
 
         .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active::after {
             width: 100%;
         }
 
@@ -215,6 +220,14 @@
             padding: 0 2rem 4rem;
         }
 
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
         .section-header {
             margin-bottom: 2rem;
             display: flex;
@@ -241,7 +254,120 @@
             margin-bottom: 4rem;
         }
 
-        /* Script Card - Unique Design */
+        /* Executors Grid */
+        .executors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Executor Card */
+        .executor-card {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .executor-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #00ff41;
+            box-shadow: 0 20px 60px rgba(0, 255, 65, 0.3);
+        }
+
+        .executor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
+            z-index: 0;
+        }
+
+        .executor-card:hover::before {
+            left: 100%;
+        }
+
+        .executor-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 204, 51, 0.1));
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .executor-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 65, 0.5));
+        }
+
+        .executor-name {
+            font-size: 2rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .executor-subtitle {
+            color: #00ff41;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .executor-body {
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .executor-download-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #00ff41, #00cc33);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .executor-download-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .executor-download-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .executor-download-btn:hover {
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.5);
+            transform: translateY(-2px);
+        }
         .script-card {
             background: rgba(0, 20, 0, 0.8);
             border: 1px solid rgba(0, 255, 65, 0.2);
@@ -488,50 +614,7 @@
             transform: translateY(-2px);
         }
 
-        /* Footer */
-        footer {
-            position: relative;
-            z-index: 1;
-            margin-top: 6rem;
-            padding: 3rem 2rem;
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 1px solid rgba(0, 255, 65, 0.2);
-        }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-        }
-
-        .footer-section h3 {
-            color: #00ff41;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .footer-section p, .footer-section a {
-            color: #a0ffa0;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .footer-section a:hover {
-            color: #00ff41;
-            padding-left: 10px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(0, 255, 65, 0.1);
-            color: #a0ffa0;
-        }
 
         @media (max-width: 768px) {
             .hero-title {
@@ -539,6 +622,10 @@
             }
             
             .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .executors-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -562,8 +649,9 @@
         <div class="nav-content">
             <div class="brand">⚡ SCRIPTING4GOOD</div>
             <div class="nav-links">
-                <a href="#scripts">Scripts</a>
-                <a href="https://discord.gg/D3GZs6F3">Discord</a>
+                <a href="#" onclick="showSection('scripts')" class="nav-link active">Scripts</a>
+                <a href="#" onclick="showSection('executors')" class="nav-link">Executors</a>
+                <a href="https://discord.gg/D3GZs6F3" target="_blank">Discord</a>
             </div>
         </div>
     </nav>
@@ -581,11 +669,83 @@
     </div>
 
     <div class="scripts-container">
-        <div class="section-header">
-            <span class="section-title">🔥 Popular Scripts</span>
-            <div class="section-line"></div>
+        <!-- Scripts Section -->
+        <div id="scripts-section" class="content-section active">
+            <div class="section-header">
+                <span class="section-title">🔥 Popular Scripts</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="scripts-grid" id="scriptsGrid"></div>
         </div>
-        <div class="scripts-grid" id="scriptsGrid"></div>
+
+        <!-- Executors Section -->
+        <div id="executors-section" class="content-section">
+            <div class="section-header">
+                <span class="section-title">⚡ Best Executors</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="executors-grid">
+                <!-- Xeno Executor -->
+                <div class="executor-card">
+                    <div class="executor-header">
+                        <div class="executor-icon">🚀</div>
+                        <h2 class="executor-name">XENO</h2>
+                    </div>
+                    <div class="executor-body">
+                        <a href="https://www.xeno.onl/download" target="_blank" style="text-decoration: none;">
+                            <button class="executor-download-btn">
+                                <span style="position: relative; z-index: 1;">⬇️ DOWNLOAD XENO</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Fluxus Executor -->
+                <div class="executor-card">
+                    <div class="executor-header">
+                        <div class="executor-icon">⚡</div>
+                        <h2 class="executor-name">VELOCITY</h2>
+                    </div>
+                    <div class="executor-body">
+                        <a href="https://realvelocity.xyz/" target="_blank" style="text-decoration: none;">
+                            <button class="executor-download-btn">
+                                <span style="position: relative; z-index: 1;">⬇️ DOWNLOAD VELOCITY</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Delta Executor -->
+                <div class="executor-card">
+                    <div class="executor-header">
+                        <div class="executor-icon">🤖</div>
+                        <h2 class="executor-name">DELTA</h2>
+                    </div>
+                    <div class="executor-body">
+                        <a href="https://deltaexploits.gg/" target="_blank" style="text-decoration: none;">
+                            <button class="executor-download-btn">
+                                <span style="position: relative; z-index: 1;">⬇️ DOWNLOAD DELTA</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bunni Executor -->
+                <div class="executor-card">
+                    <div class="executor-header">
+                        <div class="executor-icon">🐰</div>
+                        <h2 class="executor-name">BUNNI</h2>
+                    </div>
+                    <div class="executor-body">
+                        <a href="https://realbunni.com/" target="_blank" style="text-decoration: none;">
+                            <button class="executor-download-btn">
+                                <span style="position: relative; z-index: 1;">⬇️ DOWNLOAD BUNNI</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="scriptModal" class="modal">
@@ -599,25 +759,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="#">All Scripts</a>
-                <a href="#">Popular Games</a>
-                <a href="#">Latest Updates</a>
-            </div>
-            <div class="footer-section">
-                <h3>Community</h3>
-                <a href="#">Discord Server</a>
-                <a href="#">TikTok</a>
-                <a href="#">YouTube</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 Scripting4Good - Use at your own risk</p>
-        </div>
-    </footer>
+
 
     <script>
         // Matrix Rain Effect
@@ -666,9 +808,31 @@
                 isNew: true,
                 features: ["Auto Rob", "Auto Arrest", "Kill Aura", "Cop Detection"],
                 scriptUrl: "https://linkvertise.com/2627351/HqzIr5preowB?o=sharing",
-                backgroundImage: "https://tr.rbxcdn.com/180DAY-3623ea1d4d38af6a55bc156a099a8850/768/432/Image/Webp/noFilter"
+                backgroundImage: "https://i.imgur.com/your-image.jpg" // Coloque a URL da imagem aqui
             },
         ];
+
+        // Navigation
+        function showSection(section) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            // Show selected section
+            if (section === 'scripts') {
+                document.getElementById('scripts-section').classList.add('active');
+                document.querySelector('[onclick="showSection(\'scripts\')"]').classList.add('active');
+            } else if (section === 'executors') {
+                document.getElementById('executors-section').classList.add('active');
+                document.querySelector('[onclick="showSection(\'executors\')"]').classList.add('active');
+            }
+        }
 
         // Render Scripts
         function renderScripts() {
@@ -729,7 +893,7 @@
             }
         }
 
-        
+        // Search
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.script-card');

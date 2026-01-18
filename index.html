@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scripting4Good - Roblox Scripts</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Matrix Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+            padding: 1.5rem 3rem;
+        }
+
+        .nav-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00ff41;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .brand:hover {
+            text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #00ff41;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #00ff41;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            background: radial-gradient(ellipse at top, rgba(0, 255, 65, 0.15), transparent 60%);
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #00ff41, #00cc33, #00ff41);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titlePulse 2s ease-in-out infinite;
+            line-height: 1.2;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #a0ffa0;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* Search Section */
+        .search-section {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+            padding: 0 2rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 5rem 1.5rem 2rem;
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #00ff41;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            background: rgba(0, 255, 65, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: rgba(160, 255, 160, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #00ff41;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 255, 65, 0.03);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #00ff41;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0ffa0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scripts Section */
+        .scripts-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #00ff41;
+            font-weight: 700;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, #00ff41, transparent);
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Script Card - Unique Design */
+        .script-card {
+            background: rgba(0, 20, 0, 0.8);
+            border: 1px solid rgba(0, 255, 65, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            transition: all 0.4s;
+            z-index: 0;
+        }
+
+        .script-card:hover .card-background {
+            opacity: 0.25;
+            transform: scale(1.1);
+        }
+
+        .script-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .script-card:hover::before {
+            left: 100%;
+        }
+
+        .script-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: #00ff41;
+            box-shadow: 0 20px 60px rgba(0, 255, 65, 0.3);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(0, 204, 51, 0.1));
+            border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 65, 0.5));
+        }
+
+        .card-meta {
+            text-align: right;
+        }
+
+        .card-date {
+            font-size: 0.85rem;
+            color: #00ff41;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #00ff41;
+            color: #000;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .card-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #00ff41;
+        }
+
+        .card-footer {
+            padding: 0 1.5rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #00ff41, #00cc33);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
+        }
+
+        .download-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .download-button:hover {
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: rgba(0, 20, 0, 0.95);
+            margin: 5% auto;
+            padding: 3rem;
+            width: 90%;
+            max-width: 700px;
+            border: 2px solid #00ff41;
+            border-radius: 20px;
+            box-shadow: 0 0 100px rgba(0, 255, 65, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            font-size: 2.5rem;
+            color: #00ff41;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            text-shadow: 0 0 20px #00ff41;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: #00ff41;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .code-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .code-box {
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border: 2px solid rgba(0, 255, 65, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            resize: none;
+            line-height: 1.6;
+        }
+
+        .copy-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #00ff41, #00cc33);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .copy-button:hover {
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            margin-top: 6rem;
+            padding: 3rem 2rem;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(0, 255, 65, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            color: #00ff41;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #a0ffa0;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #00ff41;
+            padding-left: 10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 255, 65, 0.1);
+            color: #a0ffa0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg">
+        <canvas id="matrixCanvas"></canvas>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="brand">⚡ SCRIPTING4GOOD</div>
+            <div class="nav-links">
+                <a href="#scripts">Scripts</a>
+                <a href="https://discord.gg/D3GZs6F3">Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 class="hero-title">ROBLOX SCRIPTS</h1>
+        <p class="hero-subtitle">The best scripts for your favorite games</p>
+    </section>
+
+    <div class="search-section">
+        <div class="search-wrapper">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search for scripts...">
+            <span class="search-icon">🔍</span>
+        </div>
+    </div>
+
+    <div class="scripts-container">
+        <div class="section-header">
+            <span class="section-title">🔥 Popular Scripts</span>
+            <div class="section-line"></div>
+        </div>
+        <div class="scripts-grid" id="scriptsGrid"></div>
+    </div>
+
+    <div id="scriptModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2 class="modal-title">📜 Script Code</h2>
+            <div class="code-container">
+                <textarea class="code-box" id="scriptCode" readonly></textarea>
+            </div>
+            <button class="copy-button" onclick="copyScript()">📋 Copy to Clipboard</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="#">All Scripts</a>
+                <a href="#">Popular Games</a>
+                <a href="#">Latest Updates</a>
+            </div>
+            <div class="footer-section">
+                <h3>Community</h3>
+                <a href="#">Discord Server</a>
+                <a href="#">TikTok</a>
+                <a href="#">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Scripting4Good - Use at your own risk</p>
+        </div>
+    </footer>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01SCRIPTING4GOOD';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < drops.length; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Scripts Data
+        const scripts = [
+            {
+                name: "JAIL BREAK UNIVERSAL FARM",
+                icon: "🚔",
+                date: "2026-01-17",
+                isNew: true,
+                features: ["Auto Rob", "Auto Arrest", "Kill Aura", "Cop Detection"],
+                scriptUrl: "https://linkvertise.com/2627351/HqzIr5preowB?o=sharing",
+                backgroundImage: "https://tr.rbxcdn.com/180DAY-3623ea1d4d38af6a55bc156a099a8850/768/432/Image/Webp/noFilter"
+            },
+        ];
+
+        // Render Scripts
+        function renderScripts() {
+            const grid = document.getElementById('scriptsGrid');
+            grid.innerHTML = '';
+
+            scripts.forEach((script, index) => {
+                const backgroundStyle = script.backgroundImage 
+                    ? `<div class="card-background" style="background-image: url('${script.backgroundImage}');"></div>`
+                    : '';
+                
+                const card = `
+                    <div class="script-card">
+                        ${backgroundStyle}
+                        <div class="card-header">
+                            <div class="card-icon">${script.icon}</div>
+                            <div class="card-meta">
+                                <div class="card-date">${script.date}</div>
+                                ${script.isNew ? '<span class="card-badge">NEW</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">${script.name}</h3>
+                            <div class="card-features">
+                                ${script.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="download-button" onclick="openScript(${index})">
+                                <span style="position: relative; z-index: 1;">⬇️ GET SCRIPT</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function openScript(index) {
+            const script = scripts[index];
+            window.location.href = script.scriptUrl;
+        }
+
+        function copyScript() {
+            const code = document.getElementById('scriptCode');
+            code.select();
+            document.execCommand('copy');
+            alert('✅ Script copied to clipboard!');
+        }
+
+        document.querySelector('.modal-close').onclick = function() {
+            document.getElementById('scriptModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('scriptModal')) {
+                document.getElementById('scriptModal').style.display = 'none';
+            }
+        }
+
+        
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.script-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const features = Array.from(card.querySelectorAll('.feature-tag'))
+                    .map(tag => tag.textContent.toLowerCase()).join(' ');
+                
+                if (title.includes(term) || features.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        renderScripts();
+    </script>
+</body>
+</html>
